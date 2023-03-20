@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   baseAPIURL : "https://localhost:7096/api/",
-  Google_Map_Secret_API_KEY:"AIzaSyCaKbVhcX_22R_pRKDYuNA7vox-PtGaDkI"
+  Google_Map_Secret_API_KEY:""
 };
 
 /*
