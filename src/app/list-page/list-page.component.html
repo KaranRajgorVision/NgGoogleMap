@@ -1,0 +1,156 @@
+<div class="row">
+  <div class="header col-md-12">
+    <div class="header-block bg-dark d-flex py-3 justify-content-center align-items-center">
+      <h2 class="text-info">Student App</h2>
+    </div>
+  </div>
+  <div class="body col-md-12">
+    <div class="List-header col-md-12">
+      <div class="p-3 d-flex gap-3">
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#StudentModal" (click)="clearForm()">Add New</button>
+        <button type="button" [routerLink]="['search-address']" class="btn btn-sm btn-primary" >Search Address</button>
+      </div>
+    </div>
+    <div class="student-list-body col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Address</th>
+            <th scope="col">ZipCode</th>
+            <th scope="col">City</th>
+            <th scope="col">State</th>
+            <th scope="col">Country</th>
+            <th scope="col">Hobbies</th>
+            <th scope="col">Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of studentList; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{item.firstName}}</td>
+            <td>{{item.lastName}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.gender}}</td>
+            <td>{{item.address}}</td>
+            <td>{{item.zipcode}}</td>
+            <td>{{item.city}}</td>
+            <td>{{item.state}}</td>
+            <td>{{item.country}}</td>
+            <td>{{item.hobbies}}</td>
+            <td>{{item.description}}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#StudentModal" (click)="GetStudentDetilsById(item.studentId)">Update</button>
+              <button type="button" class="btn btn-sm btn-danger" (click)="Delete(item.studentId)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="StudentModal" tabindex="-1" aria-labelledby="StudentModal" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">{{studentId > 0 ? 'Update Student' : 'Add Student'}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closebutton></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="studentForm" class="row" (ngSubmit)="onSubmit()">
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">First Name</label>
+            <input type="text" class="form-control" formControlName="firstName">
+            <div class="text-danger" *ngIf="this.studentForm.controls['firstName']?.touched &&
+            this.studentForm.controls['firstName']?.errors?.required">
+              Please provide First Name.
+            </div>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">Last Name</label>
+            <input type="Text" class="form-control" formControlName="lastName">
+            <div class="text-danger" *ngIf="this.studentForm.controls['lastName']?.touched &&
+            this.studentForm.controls['lastName']?.errors?.required">
+              Please provide Last Name
+            </div>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">Email</label>
+            <input type="email" class="form-control" formControlName="email">
+            <div class="text-danger" *ngIf="this.studentForm.controls['email']?.touched &&
+            this.studentForm.controls['email']?.errors?.required">
+              Please provide Email
+            </div>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">Phone</label>
+            <input type="email" class="form-control" formControlName="phone">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">ZipCode</label>
+            <input type="Text" class="form-control" formControlName="zipcode">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">City</label>
+            <input type="Text" class="form-control" formControlName="city">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">State</label>
+            <input type="Text" class="form-control" formControlName="state">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">Country</label>
+            <input type="Text" class="form-control" formControlName="country">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">Address</label>
+            <textarea class="form-control" cols="30" rows="10" formControlName="address"></textarea>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label">Description</label>
+            <textarea class="form-control" cols="30" rows="10" formControlName="description"></textarea>
+          </div>
+          <div class="mb-3  col-md-6">
+            <label  class="form-label d-block">Hobbies</label>
+            <div class="row">
+              <div *ngFor="let item of hobbies" class="check-items col-md-4 d-flex gap-2">
+                <input type="checkbox" class="form-check-input" [value]="item" [checked]="hobbiesArray.includes(item)"
+                (change)="hobbieChangeEvent($event)"
+                >
+                <label class="form-check-label" >{{item}}</label>
+              </div>
+            </div>
+
+          </div>
+          <div class="mb-3 col-md-6">
+            <label  class="form-label d-block">Gender</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="Male" formControlName="gender">
+              <label class="form-check-label" >
+                Male
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio"  value="Female" formControlName="gender">
+              <label class="form-check-label" >
+                Female
+              </label>
+            </div>
+          </div>
+          <div class="col-md-12 mb-3 mt-3 d-flex align-items-center justify-content-end gap-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" [disabled]="this.studentForm.invalid">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

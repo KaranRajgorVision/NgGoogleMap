@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="header col-md-12">
+    <div class="header-block bg-dark d-flex py-3 justify-content-center align-items-center">
+      <h2 class="text-info">Search Address</h2>
+    </div>
+  </div>
+  <div class="row py-3 gap-3 justify-content-between">
+    <div class="col-md-12">
+      <input ngx-google-places-autocomplete #placesRef="ngx-places" #searchText class="form-control" placeholder="Search Address"
+       (onAddressChange)="handleAddressChange($event)" [(ngModel)]="locationDTO.searchString"/>
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Address Line1" [(ngModel)]="locationDTO.addressLine1">
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Address Line 2" [(ngModel)]="locationDTO.addressLine2">
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="City" [(ngModel)]="locationDTO.city">
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="State" [(ngModel)]="locationDTO.state">
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Zip Code" [(ngModel)]="locationDTO.zipCode">
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Country" [(ngModel)]="locationDTO.country">
+    </div>
+    <div class="col-md-5">
+      <label for="markerShape">Select Marker Shape</label>
+      <select class="form-control" [(ngModel)]="markerShape">
+        <option *ngFor="let shapeItem of mapShape" [value]="shapeItem.id">{{shapeItem.shape}}</option>
+      </select>
+    </div>
+    <div class="col-md-5" *ngIf="markerShape==2">
+      <label for="circleRadius">Circle Radius</label>
+      <input type="number" class="form-control" placeholder="Radius in Kms." [(ngModel)]="radius">
+    </div>
+    <div class="col-md-5 mt-auto" >
+      <button type="button" class="btn btn-sm btn-primary" (click)="saveLocation()">Save Location</button>
+    </div>
+  </div>
+  <div class="cotainer-fluid my-5">
+    <agm-map [latitude]="locationDTO.lat" [longitude]="locationDTO.lng" class="mapParent">
+    <agm-circle *ngIf="markerShape==2" [latitude]="locationDTO.lat" [longitude]="locationDTO.lng"
+      [radius]="radius*1000"
+      [fillColor]="'red'"
+      [circleDraggable]="true"
+      [editable]="true">
+  </agm-circle>
+  <agm-marker *ngIf="markerShape==1"
+      [latitude]="locationDTO.lat"
+      [longitude]="locationDTO.lng"
+      [iconUrl]="{
+        path: shapesSVGPaths['rectangle'],
+        fillColor: 'red',
+        fillOpacity: 0.6,
+        strokeWeight: 0,
+        rotation: 0
+      }"
+      [circleDraggable]="true"
+      [editable]="true"
+    >
+    </agm-marker>
+    </agm-map>
+  </div>
+</div>
